@@ -62,7 +62,7 @@
 #include "libc/sysv/consts/prot.h"
 #include "libc/sysv/consts/sig.h"
 #include "libc/sysv/errfuns.h"
-#include "libc/thread/itimer.internal.h"
+#include "libc/thread/itimer.h"
 #include "libc/thread/posixthread.internal.h"
 #include "libc/thread/tls.h"
 #ifdef __x86_64__
@@ -467,12 +467,7 @@ textwindows int sys_fork_nt(uint32_t dwCreationFlags) {
     if (ftrace_stackdigs)
       _weaken(__hook)(_weaken(ftrace_hook), _weaken(GetSymbolTable)());
     // reset core runtime services
-    __proc_wipe();
     WipeKeystrokes();
-    if (_weaken(__sig_init))
-      _weaken(__sig_init)();
-    if (_weaken(__itimer_wipe))
-      _weaken(__itimer_wipe)();
     // notify pthread join
     atomic_store_explicit(&_pthread_static.ptid, GetCurrentThreadId(),
                           memory_order_release);
